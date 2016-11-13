@@ -72,11 +72,19 @@ def get_block_list(row, col):
 
 
 def print_grid():
+    print('Grid is:')
     for i in range(81):
         s = ''.join(str(x) for x in ori[i])
         print('|{0:^9}'.format(s), end='')
         if i % 9 == 8:
             print('|')
+
+
+def count_numbers():
+    numbers = []
+    for i in range(81):
+        numbers += ori[i]
+    return len(numbers)
 
 # set log level
 # logging.basicConfig(level=logging.DEBUG)
@@ -113,13 +121,30 @@ ori[76] = [9]
 ori[79] = [8]
 # print(ori)
 
+num_count = 0
+
 # deal
 clear_if_value_single_all()
-print_grid()
-print('')
+logging.debug(ori)
 
-set_if_value_single_in_block()
-print_grid()
+while num_count != count_numbers():
+    num_count = count_numbers()
+    set_if_value_single_in_block()
+    print_grid()
+
+num_to_be_checked = []
+cell_to_be_checked = []
+for i in get_colum_list(2):
+    if len(ori[i]) > 1:
+        num_to_be_checked += ori[i]
+        cell_to_be_checked.append(i)
+print(num_to_be_checked)
+print(cell_to_be_checked)
+for v in set(num_to_be_checked):
+    print('checking %d: ' % v)
+    for i in cell_to_be_checked:
+        if v in ori[i]:
+            print(i, i // 9 //3)
 
 # print(get_block_list(3, 3))
 # print(list(set(get_row_list(1)) | set(get_colum_list(0)) | set(get_block_list(1,0)) - set([1 * 9 + 0])))
