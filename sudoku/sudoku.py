@@ -141,12 +141,14 @@ def count_numbers():
     return len(numbers)
 
 # set log level
-# logging.basicConfig(level=logging.DEBUG)
+##logging.basicConfig(level=logging.DEBUG)
 
 # init table
 ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
 
 # read data
+
+# data sample of 2016-11-12
 ori[1] = [8]
 ori[7] = [7]
 ori[10] = [3]
@@ -173,29 +175,76 @@ ori[73] = [4]
 ori[75] = [1]
 ori[76] = [9]
 ori[79] = [8]
-# print(ori)
 
-num_count = 0
+# data sample of 2016-11-15
+##ori[0] = [5]
+##ori[2] = [4]
+##ori[4] = [6]
+##ori[5] = [2]
+##ori[15] = [5]
+##ori[16] = [6]
+##ori[17] = [9]
+##ori[22] = [5]
+##ori[24] = [1]
+##ori[30] = [3]
+##ori[31] = [2]
+##ori[32] = [4]
+##ori[37] = [1]
+##ori[38] = [2]
+##ori[42] = [7]
+##ori[44] = [5]
+##ori[49] = [7]
+##ori[51] = [4]
+##ori[56] = [5]
+##ori[57] = [6]
+##ori[61] = [1]
+##ori[63] = [1]
+##ori[65] = [8]
+##ori[67] = [3]
+##ori[69] = [2]
+##ori[73] = [4]
+##ori[74] = [6]
+##ori[76] = [1]
+##ori[78] = [9]
+
+# print(ori)
 
 # deal
 clear_if_value_single_all()
 logging.debug(ori)
 
-while num_count != count_numbers():
-    num_count = count_numbers()
-    set_if_value_single_in_block()
-    print_grid()
+num_count = count_numbers()
+changed_value_single_in_block = True
+changed_block_single = False
 
-while True:
-    clear_if_block_single()
-    print_grid()
-    if num_count == count_numbers():
+while changed_value_single_in_block or changed_block_single:
+    changed_value_single_in_block = False
+    changed_block_single = False
+    
+    # call set_if_value_single_in_block function to find number appear once in a block(row/colum/block)
+    while True:
+        set_if_value_single_in_block()
+        print_grid()
+        if num_count == count_numbers():
+            break
+        else:
+            num_count = count_numbers()
+            changed_value_single_in_block = True
+            
+    if not changed_value_single_in_block:
         break
-    else:
-        num_count = count_numbers()
 
-set_if_value_single_in_block()
+    # call clear_if_block_single function to find number appear in a part of some block(row/colum/block), and then clear another cell of relative block
+    while True:
+        clear_if_block_single()
+        print_grid()
+        if num_count == count_numbers():
+            break
+        else:
+            num_count = count_numbers()
+            changed_block_single = True
+
+    if not changed_block_single:
+        break
 
 print_grid()
-# print(get_block_list(3, 3))
-# print(list(set(get_row_list(1)) | set(get_colum_list(0)) | set(get_block_list(1,0)) - set([1 * 9 + 0])))
