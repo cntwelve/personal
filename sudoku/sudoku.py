@@ -1,5 +1,6 @@
-import logging
+# -*- coding: utf-8 -*-
 
+import logging
 
 def clear_if_value_single(row, col):
     if len(ori[row * 9 + col]) == 1:
@@ -46,6 +47,59 @@ def set_if_value_single_in_block():
                         ori[i] = [v]
                         clear_if_value_single(i // 9, i % 9)
 
+def clear_if_colum_block_single(colum):
+    num_to_be_checked = []
+    cell_to_be_checked = []
+    for i in get_colum_list(colum):
+        if len(ori[i]) > 1:
+            num_to_be_checked += ori[i]
+            cell_to_be_checked.append(i)
+    logging.debug(num_to_be_checked)
+    logging.debug(cell_to_be_checked)
+    for v in set(num_to_be_checked):
+        logging.debug('checking %d: ' % v)
+        block_part = []
+        for i in cell_to_be_checked:
+            if v in ori[i]:
+                logging.debug(str(i) + ', ' + str(i // 9 // 3))
+                block_part.append(i // 27)
+        if len(set(block_part)) == 1:
+            logging.debug('can do clear')
+            for cell in (set(get_block_list(block_part[0] * 3, colum)) - set(get_colum_list(colum))):
+                if v in ori[cell] and len(ori[cell]) > 1:
+                    ori[cell].remove(v)
+                    if len(ori[cell]) == 1:
+                        clear_if_value_single(cell // 9, cell % 9)
+
+def clear_if_row_block_single(row):
+    num_to_be_checked = []
+    cell_to_be_checked = []
+    for i in get_row_list(row):
+        if len(ori[i]) > 1:
+            num_to_be_checked += ori[i]
+            cell_to_be_checked.append(i)
+    logging.debug(num_to_be_checked)
+    logging.debug(cell_to_be_checked)
+    for v in set(num_to_be_checked):
+        logging.debug('checking %d: ' % v)
+        block_part = []
+        for i in cell_to_be_checked:
+            if v in ori[i]:
+                logging.debug(str(i) + ', ' + str(i % 9 // 3))
+                block_part.append(i % 9 // 3)
+        if len(set(block_part)) == 1:
+            logging.debug('can do clear')
+            for cell in (set(get_block_list(row, block_part[0] * 3)) - set(get_row_list(row))):
+                if v in ori[cell] and len(ori[cell]) > 1:
+                    ori[cell].remove(v)
+                    if len(ori[cell]) == 1:
+                        clear_if_value_single(cell // 9, cell % 9)
+
+def clear_if_block_single():
+    for i in range(9):
+        clear_if_colum_block_single(i)
+    for i in range(9):
+        clear_if_row_block_single(i)
 
 def get_row_list(row):
     row_list = []
@@ -132,28 +186,15 @@ while num_count != count_numbers():
     set_if_value_single_in_block()
     print_grid()
 
-num_to_be_checked = []
-cell_to_be_checked = []
-for i in get_colum_list(2):
-    if len(ori[i]) > 1:
-        num_to_be_checked += ori[i]
-        cell_to_be_checked.append(i)
-print(num_to_be_checked)
-print(cell_to_be_checked)
-for v in set(num_to_be_checked):
-    print('checking %d: ' % v)
-    block_part = []
-    for i in cell_to_be_checked:
-        if v in ori[i]:
-            print(i, i // 9 // 3)
-            block_part.append(i // 27)
-    if len(set(block_part)) == 1:
-        print('can do clear')
-        for cell in (set(get_block_list(block_part[0] * 3, 2)) - set(get_colum_list(2))):
-            if v in ori[cell] and len(ori[cell]) > 1:
-                ori[cell].remove(v)
-                if len(ori[cell]) == 1:
-                    clear_if_value_single(cell // 9, cell % 9)
+while True:
+    clear_if_block_single()
+    print_grid()
+    if num_count == count_numbers():
+        break
+    else:
+        num_count = count_numbers()
+
+set_if_value_single_in_block()
 
 print_grid()
 # print(get_block_list(3, 3))
