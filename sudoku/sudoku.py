@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import urllib.request
+import re
 
 def clear_if_value_single(row, col):
     if len(ori[row * 9 + col]) == 1:
@@ -149,32 +151,32 @@ ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
 # read data
 
 # data sample of 2016-11-12
-ori[1] = [8]
-ori[7] = [7]
-ori[10] = [3]
-ori[11] = [7]
-ori[13] = [2]
-ori[17] = [1]
-ori[21] = [9]
-ori[29] = [4]
-ori[32] = [1]
-ori[33] = [2]
-ori[36] = [7]
-ori[45] = [1]
-ori[48] = [2]
-ori[50] = [4]
-ori[51] = [9]
-ori[52] = [6]
-ori[58] = [7]
-ori[65] = [5]
-ori[66] = [4]
-ori[68] = [6]
-ori[70] = [9]
-ori[72] = [3]
-ori[73] = [4]
-ori[75] = [1]
-ori[76] = [9]
-ori[79] = [8]
+# ori[1] = [8]
+# ori[7] = [7]
+# ori[10] = [3]
+# ori[11] = [7]
+# ori[13] = [2]
+# ori[17] = [1]
+# ori[21] = [9]
+# ori[29] = [4]
+# ori[32] = [1]
+# ori[33] = [2]
+# ori[36] = [7]
+# ori[45] = [1]
+# ori[48] = [2]
+# ori[50] = [4]
+# ori[51] = [9]
+# ori[52] = [6]
+# ori[58] = [7]
+# ori[65] = [5]
+# ori[66] = [4]
+# ori[68] = [6]
+# ori[70] = [9]
+# ori[72] = [3]
+# ori[73] = [4]
+# ori[75] = [1]
+# ori[76] = [9]
+# ori[79] = [8]
 
 # data sample of 2016-11-15
 ##ori[0] = [5]
@@ -207,7 +209,31 @@ ori[79] = [8]
 ##ori[76] = [1]
 ##ori[78] = [9]
 
-# print(ori)
+try:
+    sudoku = urllib.request.urlopen(
+        'http://cn.sudokupuzzle.org/online2.php?nd=3')
+    # print 'http header:/n', sudoku.info()
+    # print 'http status:', sudoku.getcode()
+    print('url: ' + sudoku.geturl())
+    for line in sudoku:  # 就像在操作本地文件
+        # print(line)
+        matchObj = re.search(r'tmda=\'(\d+)\'', str(line))
+        if matchObj:
+            # print(matchObj.group(1))
+            question = list(map(lambda x: int(x), list(matchObj.group(1))[:81]))
+            answer = list(map(lambda x: int(x), list(matchObj.group(1))[81:162]))
+            break
+except Exception as e:
+    print(e)
+finally:
+    if sudoku:
+        sudoku.close()
+
+if question and len(question) == 81:
+	for i in range(81):
+		if question[i] != 0 :
+			ori[i] = [question[i]]
+print(ori)
 
 # deal
 clear_if_value_single_all()
@@ -231,8 +257,8 @@ while changed_value_single_in_block or changed_block_single:
             num_count = count_numbers()
             changed_value_single_in_block = True
             
-    if not changed_value_single_in_block:
-        break
+    # if not changed_value_single_in_block:
+    #     break
 
     # call clear_if_block_single function to find number appear in a part of some block(row/colum/block), and then clear another cell of relative block
     while True:
@@ -244,7 +270,7 @@ while changed_value_single_in_block or changed_block_single:
             num_count = count_numbers()
             changed_block_single = True
 
-    if not changed_block_single:
-        break
+    # if not changed_block_single:
+    #     break
 
 print_grid()
