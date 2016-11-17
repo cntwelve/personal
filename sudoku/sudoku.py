@@ -73,6 +73,46 @@ def clear_if_colum_block_single(colum):
                     if len(ori[cell]) == 1:
                         clear_if_value_single(cell // 9, cell % 9)
 
+def clear_if_block_block_single(block_row, block_colum):
+    num_to_be_checked = []
+    cell_to_be_checked = []
+    for i in get_block_list(block_row, block_colum):
+        if len(ori[i]) > 1:
+            num_to_be_checked += ori[i]
+            cell_to_be_checked.append(i)
+    logging.debug(num_to_be_checked)
+    logging.debug(cell_to_be_checked)
+    for v in set(num_to_be_checked):
+        logging.debug('checking %d: ' % v)
+
+        # check if the same row
+        block_part = []
+        for i in cell_to_be_checked:
+            if v in ori[i]:
+                logging.debug(str(i) + ', ' + str(i // 9))
+                block_part.append(i // 9)
+        if len(set(block_part)) == 1:
+            logging.debug('can do clear')
+            for cell in (set(get_row_list(block_part[0])) - set(get_block_list(block_row, block_colum))):
+                if v in ori[cell] and len(ori[cell]) > 1:
+                    ori[cell].remove(v)
+                    if len(ori[cell]) == 1:
+                        clear_if_value_single(cell // 9, cell % 9)
+
+        # check if the same colum
+        block_part = []
+        for i in cell_to_be_checked:
+            if v in ori[i]:
+                logging.debug(str(i) + ', ' + str(i % 9))
+                block_part.append(i % 9)
+        if len(set(block_part)) == 1:
+            logging.debug('can do clear')
+            for cell in (set(get_colum_list(block_part[0])) - set(get_block_list(block_row, block_colum))):
+                if v in ori[cell] and len(ori[cell]) > 1:
+                    ori[cell].remove(v)
+                    if len(ori[cell]) == 1:
+                        clear_if_value_single(cell // 9, cell % 9)
+
 def clear_if_row_block_single(row):
     num_to_be_checked = []
     cell_to_be_checked = []
@@ -102,6 +142,9 @@ def clear_if_block_single():
         clear_if_colum_block_single(i)
     for i in range(9):
         clear_if_row_block_single(i)
+    for i in range(0, 7, 3):
+        for j in range(0, 7, 3):
+            clear_if_block_block_single(i, j)
 
 def get_row_list(row):
     row_list = []
@@ -143,7 +186,7 @@ def count_numbers():
     return len(numbers)
 
 # set log level
-##logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 # init table
 ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
@@ -211,7 +254,7 @@ ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
 
 try:
     sudoku = urllib.request.urlopen(
-        'http://cn.sudokupuzzle.org/online2.php?nd=3')
+        'http://cn.sudokupuzzle.org/online2.php?nd=3&y=2016&m=11&d=15')
     # print 'http header:/n', sudoku.info()
     # print 'http status:', sudoku.getcode()
     print('url: ' + sudoku.geturl())
