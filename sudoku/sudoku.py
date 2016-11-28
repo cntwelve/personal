@@ -254,7 +254,7 @@ ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
 
 try:
     sudoku = urllib.request.urlopen(
-        'http://cn.sudokupuzzle.org/online2.php?nd=3&y=2016&m=11&d=15')
+        'http://cn.sudokupuzzle.org/online2.php?nd=3')
     # print 'http header:/n', sudoku.info()
     # print 'http status:', sudoku.getcode()
     print('url: ' + sudoku.geturl())
