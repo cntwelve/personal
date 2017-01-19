@@ -3,6 +3,7 @@
 import logging
 import urllib.request
 import re
+import itertools
 
 def clear_if_value_single(row, col):
     if len(ori[row * 9 + col]) == 1:
@@ -146,6 +147,16 @@ def clear_if_block_single():
         for j in range(0, 7, 3):
             clear_if_block_block_single(i, j)
 
+def find_just_n():
+    nums = [i for i in range(1, 10)]
+    logging.debug(nums)
+    for i in range(9):
+        if len(ori[18 + i]) == 1:
+            logging.debug(ori[18 + i][0])
+            nums.remove(ori[18 + i][0])
+    logging.debug(nums)
+    logging.debug(list(itertools.combinations(nums,2)))
+
 def get_row_list(row):
     row_list = []
     for i in range(9):
@@ -186,7 +197,7 @@ def count_numbers():
     return len(numbers)
 
 # set log level
-# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 # init table
 ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
@@ -253,8 +264,8 @@ ori = [[1, 2, 3, 4, 5, 6, 7, 8, 9] for i in range(81)]
 ##ori[78] = [9]
 
 try:
-    sudoku = urllib.request.urlopen(
-        'http://cn.sudokupuzzle.org/online2.php?nd=3')
+    # sudoku = urllib.request.urlopen('http://cn.sudokupuzzle.org/online2.php?nd=3')
+    sudoku = urllib.request.urlopen('http://cn.sudokupuzzle.org/online2.php?nd=2&y=2017&m=01&d=01')
     # print 'http header:/n', sudoku.info()
     # print 'http status:', sudoku.getcode()
     print('url: ' + sudoku.geturl())
@@ -317,3 +328,5 @@ while changed_value_single_in_block or changed_block_single:
     #     break
 
 print_grid()
+
+find_just_n()
