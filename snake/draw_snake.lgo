@@ -1,8 +1,45 @@
 to draw_snake
-cs
-setpensize 10
-setpc 5
-fd 100
-repeat 100 [WAIT 1 setpensize 10 setpc 5 BACK 100 PENERASE FORWARD 1 PENPAINT FORWARD 1 PENUP FORWARD 97 PENDOWN FORWARD 2 setpensize 1 setpc 0 left 90 arc -180 4 rt 90]
+  cs
+  HIDETURTLE
+  setpensize 11
+  setpc 5
+  fd 100
+  repeat 100 
+    [
+      WAIT 1 
+      setpensize 11 
+      setpc 5 
+      BACK 100 
+      PENERASE 
+      FORWARD 1 
+      PENPAINT 
+      FORWARD 1 
+      PENUP 
+      FORWARD 97 
+      PENDOWN 
+      FORWARD 2   
+      setpensize 1 
+      setpc 0 
+      left 90 
+      arc -180 5 
+      rt 90
+    ]
+  SHOWTURTLE
 end
 
+TO ONKEYDOWN
+  IF KEYBOARDVALUE = ASCII "T [ HIDETURTLE ]
+  IF KEYBOARDVALUE = ASCII "S [ IF SCREENCOLOR <> 1 [SETSCREENCOLOR 1] ]
+  PRINT KEYBOARDVALUE
+END
+
+TO ONKEYUP
+  IF KEYBOARDVALUE = ASCII "T [ SHOWTURTLE ]
+  IF KEYBOARDVALUE = ASCII "S [ SETSCREENCOLOR 7 ]
+  PRINT KEYBOARDVALUE
+END
+
+TO SNAKE_LINE
+  clearscreen
+  fd 100
+END
