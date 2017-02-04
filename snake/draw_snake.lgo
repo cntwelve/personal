@@ -39,7 +39,48 @@ TO ONKEYUP
   PRINT KEYBOARDVALUE
 END
 
+; ex 1.1
+; draw a line for snake
 TO SNAKE_LINE
   clearscreen
   fd 100
+END
+
+; ex 1.2
+; draw a line-snake having color
+TO SNAKE_COLOR
+  CLEARSCREEN
+
+  ; set color pen used
+  SETPENCOLOR 5
+  
+  FD 100
+END
+
+; ex 1.3
+; draw a line-snake with head
+TO SNAKE_WITH_HEAD
+  CLEARSCREEN
+
+  ; use color 5 for body
+  SETPENCOLOR 5
+  FD 95
+
+  ; use color 0 for head
+  SETPENCOLOR 0
+  FD 5
+END
+
+; ex 1.4
+; draw a snake using thick line
+TO SNAKE_THICK
+  CLEARSCREEN
+
+  ; set pen size to 11 for snake body
+  SETPENSIZE 11
+
+  SETPENCOLOR 5
+  FD 95
+  SETPENCOLOR 0
+  FD 5
 END
