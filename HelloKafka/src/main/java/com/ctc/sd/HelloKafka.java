@@ -10,6 +10,7 @@ import java.util.Random;
 
 public class HelloKafka {
     public static void main(String[] args) {
+        long ts = 0L;
         Properties properties = new Properties();
         properties.put("zookeeper.connect", "192.168.25.100:2181,192.168.25.101:2181,192.168.25.102:2181");
         properties.put("serializer.class", "kafka.serializer.StringEncoder");
@@ -21,8 +22,9 @@ public class HelloKafka {
         while (true) {
             Random rand = new Random();
             char c = (char) (rand.nextInt(26) + 65);
-            System.out.println(c);
-            producer.send(new ProducerRecord<String, String>("testn", "Message from test program: " + c + "."));
+            ts = System.currentTimeMillis();
+            System.out.println(c + "," + ts);
+            producer.send(new ProducerRecord<String, String>("testn", String.format("%d,%s", ts, c)));
             if (c == 'A') {
                 break;
             }
