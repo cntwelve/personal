@@ -18,12 +18,15 @@ public class HelloKafka {
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
         Producer<String, String> producer = new KafkaProducer<String, String>(properties);
-while (true) {
-    Random rand = new Random();
-    
-    producer.send(new ProducerRecord<String, String>("testn", "Message from test program."));
-    break;
-}
+        while (true) {
+            Random rand = new Random();
+            char c = (char) (rand.nextInt(26) + 65);
+            System.out.println(c);
+            producer.send(new ProducerRecord<String, String>("testn", "Message from test program: " + c + "."));
+            if (c == 'A') {
+                break;
+            }
+        }
         producer.close();
     }
 }
