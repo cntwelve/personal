@@ -19,4 +19,5 @@ dependencies {
 //    compile group: 'org.apache.kafka', name: 'kafka_2.11', version: '0.10.0.0'
     compile("org.apache.kafka:kafka-clients:0.10.0.0")
     compile("org.apache.kafka:kafka-streams:0.10.0.0")
+    compile("org.rocksdb:rocksdbjni:5.4.5")
 }
