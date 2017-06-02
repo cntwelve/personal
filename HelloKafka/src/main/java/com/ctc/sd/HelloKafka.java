@@ -24,7 +24,8 @@ public class HelloKafka {
             char c = (char) (rand.nextInt(26) + 65);
             ts = System.currentTimeMillis();
             System.out.println(c + "," + ts);
-            producer.send(new ProducerRecord<String, String>("testn", String.format("%d,%s", ts, c)));
+            producer.send(new ProducerRecord<String, String>("test-m", String.format("%d,%s", ts, c)));
+//            producer.send(new ProducerRecord<String, String>("testn", String.format("%d,%s", ts, c)));
             if (c == 'A') {
                 break;
             }

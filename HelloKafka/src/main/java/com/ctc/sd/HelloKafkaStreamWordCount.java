@@ -36,7 +36,7 @@ public class HelloKafkaStreamWordCount {
 
         KStreamBuilder builder = new KStreamBuilder();
 
-        KStream<String, String> source = builder.stream("testn");
+        KStream<String, String> source = builder.stream("test-m");
 
 /*
         KTable<String, Long> counts = source
@@ -58,11 +58,24 @@ public class HelloKafkaStreamWordCount {
         counts.to(Serdes.String(), Serdes.Long(), "testm");
 */
 
+/*
         source
+                .through("test-m")
                 .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
                 .map((key, value) -> new KeyValue<>(value, value))
                 .countByKey(stringSerde, "Counts")
+//                .groupBy((key, word) -> word)
+//                .count("Counts")
                 .to(stringSerde, longSerde, "testm");
+//                .to("testm");
+*/
+
+        KStream<String, Long> wordCounts = source
+                .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
+                .map((key, word) -> new KeyValue<>(word, word))
+                .countByKey("Counts")
+                .toStream();
+        wordCounts.to(stringSerde, longSerde, "testm");
 
         KafkaStreams streams = new KafkaStreams(builder, props);
         streams.start();
