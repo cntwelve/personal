@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #  Copyright 2016 The TensorFlow Authors. All Rights Reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +13,13 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-"""An Example of a DNNClassifier for the Iris dataset."""
+
+"""
+结合Google的示例程序（https://github.com/tensorflow/tensorflow/tree/r1.5/tensorflow/examples/get_started/regression）
+对教程中的例子（https://github.com/MorvanZhou/tutorials/blob/master/tensorflowTUT/tf11_build_network/full_code.py）进行了重写。
+在过程中，主要问题在对dataset，FeatureColumn等的理解
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -56,12 +64,21 @@ def main(argv):
         return (
             # Shuffling with a buffer larger than the data set ensures
             # that the examples are well mixed.
-            tf.data.Dataset.from_tensor_slices(({"x": test_x}, test_y)).shuffle(3).batch(3)
+            tf.data.Dataset.from_tensor_slices(({"x": test_x}, test_y)).shuffle(300).batch(30)
             # Repeat forever
             .repeat(3)
             # .make_one_shot_iterator().get_next()
             )
 
+    def input_predict():
+        return (
+            # Shuffling with a buffer larger than the data set ensures
+            # that the examples are well mixed.
+            tf.data.Dataset.from_tensor_slices(({"x": [0.5, -0.5, 0.3]})).batch(3)
+            # Repeat forever
+            .repeat(1)
+            # .make_one_shot_iterator().get_next()
+            )
 
     # Fetch the data
     (train_x, train_y), (test_x, test_y) = load_data()
@@ -87,19 +104,23 @@ def main(argv):
     print(eval_result)
     print('\nTest set accuracy: {average_loss:0.3f}\n'.format(**eval_result))
 
-    # # Generate predictions from the model
-    # expected = ['Setosa', 'Versicolor', 'Virginica']
-    # predict_x = {
-    #     'SepalLength': [5.1, 5.9, 6.9],
-    #     'SepalWidth': [3.3, 3.0, 3.1],
-    #     'PetalLength': [1.7, 4.2, 5.4],
-    #     'PetalWidth': [0.5, 1.5, 2.1],
-    # }
+    # Generate predictions from the model
+    predict_x = {
+        'x': [0.5, -0.5, 0.3],
+    }
 
-    # predictions = classifier.predict(
-    #     input_fn=lambda:iris_data.eval_input_fn(predict_x,
-    #                                             labels=None,
-    #                                             batch_size=args.batch_size))
+    predictions = classifier.predict(
+        input_fn=input_test)
+
+    print("\nPrediction results:")
+    for i, prediction in enumerate(predictions):
+        print(prediction["predictions"][0])
+        # msg = ("X: {: 9.2f}, "
+        #        "Prediction: ${: 9.2f}")
+        # msg = msg.format(predict_x["x"][i],
+        #                  prediction["predictions"][0])
+
+    # print("    " + msg)
 
     # for pred_dict, expec in zip(predictions, expected):
     #     template = ('\nPrediction is "{}" ({:.1f}%), expected "{}"')
