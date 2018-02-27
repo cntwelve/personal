@@ -44,7 +44,7 @@ def main(argv):
         noise = np.random.normal(0, 0.05, train_x.shape).astype(np.float32)
         train_y = np.square(train_x) - 0.5 + noise
 
-        test_x = np.linspace(-1, 1, 3, dtype=np.float32) #[:, np.newaxis]
+        test_x = np.linspace(-1, 1, 300, dtype=np.float32) #[:, np.newaxis]
         noise = np.random.normal(0, 0.05, test_x.shape).astype(np.float32)
         test_y = np.square(test_x) - 0.5 + noise
 
@@ -110,7 +110,7 @@ def main(argv):
     }
 
     predictions = classifier.predict(
-        input_fn=input_test)
+        input_fn=input_predict)
 
     print("\nPrediction results:")
     for i, prediction in enumerate(predictions):
