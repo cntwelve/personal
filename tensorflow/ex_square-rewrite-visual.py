@@ -105,7 +105,10 @@ def main(argv):
     classifier = tf.estimator.DNNRegressor(
         feature_columns=my_feature_columns,
         # Two hidden layers of 10 nodes each.
-        hidden_units=[10, 10])
+        hidden_units=[10, 10],
+        model_dir="logs/ex_square-rewrite-visual")
+
+    # tf.summary.FileWriter("logs")
 
     # Train the Model.
     classifier.train(
