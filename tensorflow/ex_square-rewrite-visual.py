@@ -15,9 +15,9 @@
 #  limitations under the License.
 
 """
-结合Google的示例程序（https://github.com/tensorflow/tensorflow/tree/r1.5/tensorflow/examples/get_started/regression）
-对教程中的例子（https://github.com/MorvanZhou/tutorials/blob/master/tensorflowTUT/tf11_build_network/full_code.py）进行了重写。
-在过程中，主要问题在对dataset，FeatureColumn等的理解
+在ex_square-rewrite.py的基础上
+结合教程中的例子（https://github.com/MorvanZhou/tutorials/blob/master/tensorflowTUT/tf12_plot_result/full_code.py）进行了重写。
+在过程中，主要针对matplotlib的使用，以及predictions的获取进行了实现
 """
 
 from __future__ import absolute_import
