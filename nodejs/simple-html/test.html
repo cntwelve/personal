@@ -36,7 +36,8 @@
         function query() {
             var id = randomFrom(1, document.getElementById('id').value);
             var temp = randomFrom(document.getElementById('low').value * 10, document.getElementById('high').value * 10) / 10;
-            fly.get('http://127.0.0.1:8080/?id=' + id + '&temp=' + temp)
+            var datetime = new Date().getTime();
+            fly.get('http://127.0.0.1:8080/?id=' + id + '&temp=' + temp + '&datetime=' + datetime)
                 .then(function (response) {
                     console.log(response);
                     document.getElementById('message').innerHTML += '发送数据：传感器ID(' + id + ')温度： ' + temp + '。  返回结果： ' + response.data + '\n';
