@@ -8,6 +8,8 @@ Please note, this code is only for python 3+. If you are using python 2+, please
 需要注意，在读取数据的时候，不能用one-hot
 需要定义label的类型
 另外，需要定义feature_column的shape
+
+采用多层，增加神经元的个数，以及多次运行同一参数，获得的结果不一致，差距较大
 """
 from __future__ import print_function
 

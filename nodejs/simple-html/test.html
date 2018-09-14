@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="../commonJS/fly.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous"> -->
+</head>
+
+<body>
+    <div><textarea id='message' style="width:100%;height:200px;" readonly></textarea></div>
+    <button type="button" onclick="query()">执行查询</button>
+    <button type=" button" onclick="querySchedule()">执行定期查询</button>
+    <button type=" button" onclick="scheID = window.clearInterval(scheID);">停止定期查询</button>
+    <button type=" button" onclick="document.getElementById('message').innerHTML = '';">清空输出列表</button>
+    <p>ID最大值：<input id='id' type="
+        text" required pattern="[1-9][0-9]*"></p>
+    <p>温度最大值：<input id='high' type=" text" required pattern="[1-9][0-9]*\.[0-9]"></p>
+    <p>温度最小值：<input id='low' type=" text" required pattern="[1-9][0-9]*\.[0-9]"></p>
+    <p>执行周期：<input id='sec' type=" text" required pattern="[1-9][0-9]*"></p>
+    <script>
+        var fly = new Fly;
+        var scheID;
+
+        fly.get('http://127.0.0.1:8080/')
+            .then(function (response) {
+                console.log(response);
+                document.getElementById('message').innerHTML += response.data + '\n';
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    </script>
+    <script>
+        function query() {
+            var id = randomFrom(1, document.getElementById('id').value);
+            var temp = randomFrom(document.getElementById('low').value * 10, document.getElementById('high').value * 10) / 10;
+            fly.get('http://127.0.0.1:8080/?id=' + id + '&temp=' + temp)
+                .then(function (response) {
+                    console.log(response);
+                    document.getElementById('message').innerHTML += '发送数据：传感器ID(' + id + ')温度： ' + temp + '。  返回结果： ' + response.data + '\n';
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
+        function randomFrom(lowerValue, upperValue) {
+            return Math.floor(Math.random() * (upperValue - lowerValue + 1) + lowerValue);
+        }
+
+        function sleep_step1(second) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(' enough sleep~');
+                }, second);
+            })
+        }
+
+        async function sleep(sec) {
+            let result = await sleep_step1(sec * 1000);
+        }
+
+        function querySchedule() {
+            var secs = document.getElementById('sec').value;
+            scheID = self.setInterval("query()", secs * 1000);
+        }
+    </script>
+    <!-- <script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo'
+        crossorigin='anonymous'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js' integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49'
+            crossorigin='anonymous'></script>
+        <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js' integrity='sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy'
+            crossorigin='anonymous'></script> -->
+</body>
+
+</html>
